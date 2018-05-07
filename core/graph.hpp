@@ -26,6 +26,7 @@ Copyright (c) 2015-2016 Xiaowei Zhu, Tsinghua University
 #include <sys/mman.h>
 #include <numa.h>
 #include <omp.h>
+#include <functional>
 
 #include <string>
 #include <vector>
@@ -187,12 +188,13 @@ public:
       int s_i = get_socket_id(t_i);
       assert(numa_run_on_node(s_i)==0);
       #ifdef PRINT_DEBUG_MESSAGES
-      // printf("thread-%d bound to socket-%d\n", t_i, s_i);
+      printf("thread-%d bound to socket-%d\n", t_i, s_i);
       #endif
     }
     #ifdef PRINT_DEBUG_MESSAGES
-    // printf("threads=%d*%d\n", sockets, threads_per_socket);
-    // printf("interleave on %s\n", nodestring);
+    printf("threads=%d*%d\n", sockets, threads_per_socket);
+    printf("interleave on %s\n", nodestring);
+    printf("Partition number: %d\n", partitions);
     #endif
 
     MPI_Comm_rank(MPI_COMM_WORLD, &partition_id);
@@ -782,9 +784,11 @@ public:
     #ifdef PRINT_DEBUG_MESSAGES
     if (partition_id==0) {
       printf("|V| = %u, |E| = %lu\n", vertices, edges);
+      printf("[Loading Graph] partition number: %d\n", partitions);
     }
     #endif
 
+    // @zc: evenly assigns edges to each partition
     EdgeId read_edges = edges / partitions;
     if (partition_id==partitions-1) {
       read_edges += edges % partitions;
@@ -795,6 +799,7 @@ public:
     int fin = open(path.c_str(), O_RDONLY);
     EdgeUnit<EdgeData> * read_edge_buffer = new EdgeUnit<EdgeData> [CHUNKSIZE];
 
+    // @zc: numa interleaved array, size := vertices
     out_degree = alloc_interleaved_vertex_array<VertexId>();
     for (VertexId v_i=0;v_i<vertices;v_i++) {
       out_degree[v_i] = 0;
@@ -818,15 +823,20 @@ public:
         __sync_fetch_and_add(&out_degree[src], 1);
       }
     }
+    // @zc: sync out_degree of each vertex
     MPI_Allreduce(MPI_IN_PLACE, out_degree, vertices, vid_t, MPI_SUM, MPI_COMM_WORLD);
 
     // locality-aware chunking
     partition_offset = new VertexId [partitions + 1];
     partition_offset[0] = 0;
+
+    // @zc: Treat vertices as edges as well
+    //    : alpha is the balance-factor
     EdgeId remained_amount = edges + EdgeId(vertices) * alpha;
     for (int i=0;i<partitions;i++) {
       VertexId remained_partitions = partitions - i;
       EdgeId expected_chunk_size = remained_amount / remained_partitions;
+      // @zc: calculate partition_offset through expected_chunk_size
       if (remained_partitions==1) {
         partition_offset[i+1] = vertices;
       } else {
@@ -846,6 +856,7 @@ public:
     }
     assert(partition_offset[partitions]==vertices);
     owned_vertices = partition_offset[partition_id+1] - partition_offset[partition_id];
+
     // check consistency of partition boundaries
     VertexId * global_partition_offset = new VertexId [partitions + 1];
     MPI_Allreduce(partition_offset, global_partition_offset, partitions + 1, vid_t, MPI_MAX, MPI_COMM_WORLD);

@@ -50,9 +50,11 @@ void compute(Graph<Empty> * graph, int iterations) {
     }
     graph->fill_vertex_array(next, (double)0);
     graph->process_edges<int,double>(
+			// @zc: sparse_signal
       [&](VertexId src){
         graph->emit(src, curr[src]);
       },
+			// @zc: sparse_slot
       [&](VertexId src, double msg, VertexAdjList<Empty> outgoing_adj){
         for (AdjUnit<Empty> * ptr=outgoing_adj.begin;ptr!=outgoing_adj.end;ptr++) {
           VertexId dst = ptr->neighbour;
@@ -60,6 +62,7 @@ void compute(Graph<Empty> * graph, int iterations) {
         }
         return 0;
       },
+			// @zc: dense_signal
       [&](VertexId dst, VertexAdjList<Empty> incoming_adj) {
         double sum = 0;
         for (AdjUnit<Empty> * ptr=incoming_adj.begin;ptr!=incoming_adj.end;ptr++) {
@@ -68,6 +71,7 @@ void compute(Graph<Empty> * graph, int iterations) {
         }
         graph->emit(dst, sum);
       },
+			// @zc: dense_slot
       [&](VertexId dst, double msg) {
         write_add(&next[dst], msg);
         return 0;

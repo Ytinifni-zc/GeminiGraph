@@ -1,0 +1,192 @@
+[
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-O3",
+            "-Wall",
+            "-std=c++11",
+            "-g",
+            "-fopenmp",
+            "-march=native",
+            "-I/home/zhaoc/git/GeminiGraph",
+            "-I/home/zhaoc/local/include",
+            "-o",
+            "toolkits/sssp",
+            "toolkits/sssp.cpp"
+        ],
+        "directory": "/home/zhaoc/git/GeminiGraph",
+        "file": "toolkits/sssp.cpp"
+    },
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-I/home/zhaoc/local/include",
+            "-O3",
+            "-Wall",
+            "-std=c++11",
+            "-g",
+            "-fopenmp",
+            "-march=native",
+            "-I/home/zhaoc/git/GeminiGraph",
+            "-o",
+            "toolkits/sssp",
+            "toolkits/sssp.cpp"
+        ],
+        "directory": "/home/zhaoc/git/GeminiGraph",
+        "file": "toolkits/sssp.cpp"
+    },
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-O3",
+            "-Wall",
+            "-std=c++11",
+            "-g",
+            "-fopenmp",
+            "-march=native",
+            "-I/home/zhaoc/git/GeminiGraph",
+            "-I/home/zhaoc/local/include",
+            "-o",
+            "toolkits/bfs",
+            "toolkits/bfs.cpp"
+        ],
+        "directory": "/home/zhaoc/git/GeminiGraph",
+        "file": "toolkits/bfs.cpp"
+    },
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-I/home/zhaoc/local/include",
+            "-O3",
+            "-Wall",
+            "-std=c++11",
+            "-g",
+            "-fopenmp",
+            "-march=native",
+            "-I/home/zhaoc/git/GeminiGraph",
+            "-o",
+            "toolkits/pagerank",
+            "toolkits/pagerank.cpp"
+        ],
+        "directory": "/home/zhaoc/git/GeminiGraph",
+        "file": "toolkits/pagerank.cpp"
+    },
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-O3",
+            "-Wall",
+            "-std=c++11",
+            "-g",
+            "-fopenmp",
+            "-march=native",
+            "-I/home/zhaoc/git/GeminiGraph",
+            "-I/home/zhaoc/local/include",
+            "-o",
+            "toolkits/bc",
+            "toolkits/bc.cpp"
+        ],
+        "directory": "/home/zhaoc/git/GeminiGraph",
+        "file": "toolkits/bc.cpp"
+    },
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-O3",
+            "-Wall",
+            "-std=c++11",
+            "-g",
+            "-fopenmp",
+            "-march=native",
+            "-I/home/zhaoc/git/GeminiGraph",
+            "-I/home/zhaoc/local/include",
+            "-o",
+            "toolkits/pagerank",
+            "toolkits/pagerank.cpp"
+        ],
+        "directory": "/home/zhaoc/git/GeminiGraph",
+        "file": "toolkits/pagerank.cpp"
+    },
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-I/home/zhaoc/local/include",
+            "-O3",
+            "-Wall",
+            "-std=c++11",
+            "-g",
+            "-fopenmp",
+            "-march=native",
+            "-I/home/zhaoc/git/GeminiGraph",
+            "-o",
+            "toolkits/cc",
+            "toolkits/cc.cpp"
+        ],
+        "directory": "/home/zhaoc/git/GeminiGraph",
+        "file": "toolkits/cc.cpp"
+    },
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-O3",
+            "-Wall",
+            "-std=c++11",
+            "-g",
+            "-fopenmp",
+            "-march=native",
+            "-I/home/zhaoc/git/GeminiGraph",
+            "-I/home/zhaoc/local/include",
+            "-o",
+            "toolkits/cc",
+            "toolkits/cc.cpp"
+        ],
+        "directory": "/home/zhaoc/git/GeminiGraph",
+        "file": "toolkits/cc.cpp"
+    },
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-I/home/zhaoc/local/include",
+            "-O3",
+            "-Wall",
+            "-std=c++11",
+            "-g",
+            "-fopenmp",
+            "-march=native",
+            "-I/home/zhaoc/git/GeminiGraph",
+            "-o",
+            "toolkits/bc",
+            "toolkits/bc.cpp"
+        ],
+        "directory": "/home/zhaoc/git/GeminiGraph",
+        "file": "toolkits/bc.cpp"
+    },
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-I/home/zhaoc/local/include",
+            "-O3",
+            "-Wall",
+            "-std=c++11",
+            "-g",
+            "-fopenmp",
+            "-march=native",
+            "-I/home/zhaoc/git/GeminiGraph",
+            "-o",
+            "toolkits/bfs",
+            "toolkits/bfs.cpp"
+        ],
+        "directory": "/home/zhaoc/git/GeminiGraph",
+        "file": "toolkits/bfs.cpp"
+    }
+]
