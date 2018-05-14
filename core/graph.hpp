@@ -806,6 +806,7 @@ public:
     }
     assert(lseek(fin, read_offset, SEEK_SET)==read_offset);
     read_bytes = 0;
+    // @zc: calculate out degree of each src vtx chunk by chunk
     while (read_bytes < bytes_to_read) {
       long curr_read_bytes;
       if (bytes_to_read - read_bytes > edge_unit_size * CHUNKSIZE) {
@@ -819,10 +820,13 @@ public:
       #pragma omp parallel for
       for (EdgeId e_i=0;e_i<curr_read_edges;e_i++) {
         VertexId src = read_edge_buffer[e_i].src;
-        VertexId dst = read_edge_buffer[e_i].dst;
-        __sync_fetch_and_add(&out_degree[src], 1);
+        // VertexId dst = read_edge_buffer[e_i].dst;
+        // @zc: out_degree in current edge buffer
+        #pragma omp atomic
+        out_degree[src]++;
       }
     }
+
     // @zc: sync out_degree of each vertex
     MPI_Allreduce(MPI_IN_PLACE, out_degree, vertices, vid_t, MPI_SUM, MPI_COMM_WORLD);
 
@@ -843,6 +847,7 @@ public:
         EdgeId got_edges = 0;
         for (VertexId v_i=partition_offset[i];v_i<vertices;v_i++) {
           got_edges += out_degree[v_i] + alpha;
+          // @zc: each chunk contains whole out edges of each node.
           if (got_edges > expected_chunk_size) {
             partition_offset[i+1] = v_i;
             break;
@@ -863,10 +868,10 @@ public:
     for (int i=0;i<=partitions;i++) {
       assert(partition_offset[i] == global_partition_offset[i]);
     }
-    MPI_Allreduce(partition_offset, global_partition_offset, partitions + 1, vid_t, MPI_MIN, MPI_COMM_WORLD);
-    for (int i=0;i<=partitions;i++) {
-      assert(partition_offset[i] == global_partition_offset[i]);
-    }
+    // MPI_Allreduce(partition_offset, global_partition_offset, partitions + 1, vid_t, MPI_MIN, MPI_COMM_WORLD);
+    // for (int i=0;i<=partitions;i++) {
+    //   assert(partition_offset[i] == global_partition_offset[i]);
+    // }
     #ifdef PRINT_DEBUG_MESSAGES
     if (partition_id==0) {
       for (int i=0;i<partitions;i++) {
@@ -943,7 +948,7 @@ public:
       outgoing_adj_bitmap[s_i]->clear();
       outgoing_adj_index[s_i] = (EdgeId*)numa_alloc_onnode(sizeof(EdgeId) * (vertices+1), s_i);
     }
-    {
+    { // @zc: outgoing edges [Dense mode]
       std::thread recv_thread_dst([&](){
         int finished_count = 0;
         MPI_Status recv_status;
@@ -1341,17 +1346,16 @@ public:
 
     prep_time += MPI_Wtime();
 
-    #ifdef PRINT_DEBUG_MESSAGES
     if (partition_id==0) {
       printf("preprocessing cost: %.2lf (s)\n", prep_time);
     }
-    #endif
   }
 
   void tune_chunks() {
     tuned_chunks_dense = new ThreadState * [partitions];
     int current_send_part_id = partition_id;
     for (int step=0;step<partitions;step++) {
+      // @zc: the ring
       current_send_part_id = (current_send_part_id + 1) % partitions;
       int i = current_send_part_id;
       tuned_chunks_dense[i] = new ThreadState [threads];
@@ -1364,6 +1368,7 @@ public:
         int s_i = get_socket_id(t_i);
         int s_j = get_socket_offset(t_i);
         if (s_j==0) {
+          // @zc: calculate offset of chunk `t_i`
           VertexId p_v_i = 0;
           while (p_v_i<compressed_incoming_adj_vertices[s_i]) {
             VertexId v_i = compressed_incoming_adj_index[s_i][p_v_i].vertex;
@@ -1382,6 +1387,7 @@ public:
           }
           end_p_v_i = p_v_i;
           remained_edges = 0;
+          // @zc: calculate edges of this chunk
           for (VertexId p_v_i=last_p_v_i;p_v_i<end_p_v_i;p_v_i++) {
             remained_edges += compressed_incoming_adj_index[s_i][p_v_i+1].index - compressed_incoming_adj_index[s_i][p_v_i].index;
             remained_edges += alpha;
