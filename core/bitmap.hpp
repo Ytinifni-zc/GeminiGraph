@@ -17,11 +17,14 @@ Copyright (c) 2015-2016 Xiaowei Zhu, Tsinghua University
 #ifndef BITMAP_HPP
 #define BITMAP_HPP
 
+#include <cstdlib>
+
 #define WORD_OFFSET(i) ((i) >> 6)
 #define BIT_OFFSET(i) ((i) & 0x3f)
 
 class Bitmap {
 public:
+  // @zc: No more than 64
   size_t size;
   unsigned long * data;
   Bitmap() : size(0), data(NULL) { }

@@ -3,6 +3,10 @@
 *.lo
 *.o
 *.obj
+*.out
+compile_commands.json
+hosts
+result
 
 # Precompiled Headers
 *.gch
