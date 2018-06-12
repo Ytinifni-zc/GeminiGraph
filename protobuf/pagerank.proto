@@ -1,0 +1,7 @@
+syntax = "proto3";
+package GeminiGraph;
+message pagerank_msg
+{
+  uint32 vertex=1;
+  float pr=2;
+}

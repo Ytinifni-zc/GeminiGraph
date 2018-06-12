@@ -27,6 +27,8 @@ Copyright (c) 2015-2016 Xiaowei Zhu, Tsinghua University
 #include <numa.h>
 #include <omp.h>
 #include <functional>
+//#include <snappy.h>
+#include <zstd.h>
 
 #include <string>
 #include <vector>
@@ -40,6 +42,7 @@ Copyright (c) 2015-2016 Xiaowei Zhu, Tsinghua University
 #include "core/mpi.hpp"
 #include "core/time.hpp"
 #include "core/type.hpp"
+//#include "GeminiGraph.pagerank.pb.h"
 
 enum ThreadStatus { WORKING, STEALING };
 
@@ -85,6 +88,35 @@ struct CommStatistic {
   double* send_bytes; // length = partitions
   double* recv_bytes; // length = partitions
 };
+
+size_t serialize_send_buff(char* cBuff, char* buff, size_t length) {
+  size_t cSize = ZSTD_compress(cBuff, length, buff, length, 1);
+  if (ZSTD_isError(cSize)) {
+    fprintf(stderr, "error compressing : %s \n", ZSTD_getErrorName(cSize));
+    exit(8);
+  }
+  return cSize;
+}
+
+size_t find_deserialize_size(char* buff, size_t length) {
+  unsigned long long rSize = ZSTD_getDecompressedSize(buff, length);
+  if (rSize == ZSTD_CONTENTSIZE_ERROR) {
+    fprintf(stderr, "Not compressed by zstd.\n");
+    exit(5);
+  } else if (rSize == ZSTD_CONTENTSIZE_UNKNOWN) {
+    fprintf(stderr, "Original size unknown. Use streaming decompression instead.\n");
+    exit(6);
+  }
+  return rSize;
+}
+
+void deserialize_recv_buff(char*dBuff, size_t rSize, char* buff, size_t length) {
+  size_t dSize = ZSTD_decompress(dBuff, rSize, buff, length);
+  if (dSize != rSize) {
+    fprintf(stderr, "error decoding : %s \n", ZSTD_getErrorName(dSize));
+    exit(7);
+  }
+}
 
 template <typename EdgeData = Empty>
 class Graph {
@@ -1756,11 +1788,10 @@ class Graph {
     if (sparse) {
       for (int i = 0; i < partitions; i++) {
         for (int s_i = 0; s_i < sockets; s_i++) {
-          recv_buffer[i][s_i]->resize(
-              sizeof(MsgUnit<M>) *
+          recv_buffer[i][s_i]->resize(sizeof(MsgUnit<M>) *
               (partition_offset[i + 1] - partition_offset[i]) * sockets);
-          send_buffer[i][s_i]->resize(sizeof(MsgUnit<M>) * owned_vertices *
-                                      sockets);
+          send_buffer[i][s_i]->resize(sizeof(MsgUnit<M>) *
+              owned_vertices * sockets);
           send_buffer[i][s_i]->count = 0;
           recv_buffer[i][s_i]->count = 0;
         }
@@ -1768,10 +1799,9 @@ class Graph {
     } else {
       for (int i = 0; i < partitions; i++) {
         for (int s_i = 0; s_i < sockets; s_i++) {
-          recv_buffer[i][s_i]->resize(sizeof(MsgUnit<M>) * owned_vertices *
-                                      sockets);
-          send_buffer[i][s_i]->resize(
-              sizeof(MsgUnit<M>) *
+          recv_buffer[i][s_i]->resize(sizeof(MsgUnit<M>) *
+              owned_vertices * sockets);
+          send_buffer[i][s_i]->resize(sizeof(MsgUnit<M>) *
               (partition_offset[i + 1] - partition_offset[i]) * sockets);
           send_buffer[i][s_i]->count = 0;
           recv_buffer[i][s_i]->count = 0;
@@ -1817,10 +1847,13 @@ class Graph {
         for (int step = 1; step < partitions; step++) {
           int i = (partition_id - step + partitions) % partitions;
           for (int s_i = 0; s_i < sockets; s_i++) {
-            MPI_Send(send_buffer[partition_id][s_i]->data,
-                     sizeof(MsgUnit<M>) * send_buffer[partition_id][s_i]->count,
+            int data_size = sizeof(MsgUnit<M>) * send_buffer[partition_id][s_i]->count;
+            char* compressed_data = new char[data_size];
+            auto compressed_data_size = serialize_send_buff(compressed_data, send_buffer[partition_id][s_i]->data, data_size);
+            MPI_Send(compressed_data, compressed_data_size,
                      MPI_CHAR, i, PassMessage, MPI_COMM_WORLD);
-            comm_info.send_bytes[partition_id] += sizeof(MsgUnit<M>) * send_buffer[partition_id][s_i]->count;
+            comm_info.send_bytes[partition_id] += compressed_data_size;
+            delete[] compressed_data;
           }
         }
       });
@@ -1829,13 +1862,23 @@ class Graph {
           int i = (partition_id + step) % partitions;
           for (int s_i = 0; s_i < sockets; s_i++) {
             MPI_Status recv_status;
+            int recv_data_size = 0;
             MPI_Probe(i, PassMessage, MPI_COMM_WORLD, &recv_status);
-            MPI_Get_count(&recv_status, MPI_CHAR, &recv_buffer[i][s_i]->count);
-            MPI_Recv(recv_buffer[i][s_i]->data, recv_buffer[i][s_i]->count,
+            //MPI_Get_count(&recv_status, MPI_CHAR, &recv_buffer[i][s_i]->count);
+            MPI_Get_count(&recv_status, MPI_CHAR, &recv_data_size);
+            char* recv_data = new char[recv_data_size];
+            //MPI_Recv(recv_buffer[i][s_i]->data, recv_buffer[i][s_i]->count,
+            MPI_Recv(recv_data, recv_data_size,
                      MPI_CHAR, i, PassMessage, MPI_COMM_WORLD,
                      MPI_STATUS_IGNORE);
-            comm_info.recv_bytes[partition_id] += recv_buffer[i][s_i]->count;
-            recv_buffer[i][s_i]->count /= sizeof(MsgUnit<M>);
+            comm_info.recv_bytes[partition_id] += recv_data_size;
+            auto real_data_size = find_deserialize_size(recv_data, recv_data_size);
+            char* real_data = new char[real_data_size];
+            deserialize_recv_buff(real_data, real_data_size, recv_data, recv_data_size);
+            memcpy(recv_buffer[i][s_i]->data, real_data, real_data_size);
+            recv_buffer[i][s_i]->count = real_data_size / sizeof(MsgUnit<M>);
+            delete[] recv_data;
+            delete[] real_data;
           }
           recv_queue[recv_queue_size] = i;
           recv_queue_mutex.lock();
@@ -2007,10 +2050,16 @@ class Graph {
           }
           int i = send_queue[step];
           for (int s_i = 0; s_i < sockets; s_i++) {
-            MPI_Send(send_buffer[i][s_i]->data,
-                     sizeof(MsgUnit<M>) * send_buffer[i][s_i]->count, MPI_CHAR,
+            // MPI_Send(send_buffer[i][s_i]->data,
+            //          sizeof(MsgUnit<M>) * send_buffer[i][s_i]->count, MPI_CHAR,
+            //          i, PassMessage, MPI_COMM_WORLD);
+            int data_size = sizeof(MsgUnit<M>) * send_buffer[i][s_i]->count;
+            char* compressed_data = new char[data_size];
+            auto compressed_data_size = serialize_send_buff(compressed_data, send_buffer[i][s_i]->data, data_size);
+            MPI_Send(compressed_data, compressed_data_size, MPI_CHAR,
                      i, PassMessage, MPI_COMM_WORLD);
-            comm_info.send_bytes[partition_id] += sizeof(MsgUnit<M>) * send_buffer[i][s_i]->count;
+            comm_info.send_bytes[partition_id] += compressed_data_size;
+            delete[] compressed_data;
           }
         }
       });
@@ -2021,15 +2070,30 @@ class Graph {
           threads.emplace_back(
               [&](int i) {
                 for (int s_i = 0; s_i < sockets; s_i++) {
+                  // MPI_Status recv_status;
+                  // MPI_Probe(i, PassMessage, MPI_COMM_WORLD, &recv_status);
+                  // MPI_Get_count(&recv_status, MPI_CHAR,
+                  //               &recv_buffer[i][s_i]->count);
+                  // MPI_Recv(recv_buffer[i][s_i]->data,
+                  //          recv_buffer[i][s_i]->count, MPI_CHAR, i, PassMessage,
+                  //          MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+                  // comm_info.recv_bytes[partition_id] += recv_buffer[i][s_i]->count;
+                  // recv_buffer[i][s_i]->count /= sizeof(MsgUnit<M>);
                   MPI_Status recv_status;
+                  int recv_data_size = 0;
                   MPI_Probe(i, PassMessage, MPI_COMM_WORLD, &recv_status);
-                  MPI_Get_count(&recv_status, MPI_CHAR,
-                                &recv_buffer[i][s_i]->count);
-                  MPI_Recv(recv_buffer[i][s_i]->data,
-                           recv_buffer[i][s_i]->count, MPI_CHAR, i, PassMessage,
+                  MPI_Get_count(&recv_status, MPI_CHAR, &recv_data_size);
+                  char* recv_data = new char[recv_data_size];
+                  MPI_Recv(recv_data, recv_data_size, MPI_CHAR, i, PassMessage,
                            MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-                  comm_info.recv_bytes[partition_id] += recv_buffer[i][s_i]->count;
-                  recv_buffer[i][s_i]->count /= sizeof(MsgUnit<M>);
+                  comm_info.recv_bytes[partition_id] += recv_data_size;
+                  auto real_data_size = find_deserialize_size(recv_data, recv_data_size);
+                  char* real_data = new char[real_data_size];
+                  deserialize_recv_buff(real_data, real_data_size, recv_data, recv_data_size);
+                  memcpy(recv_buffer[i][s_i]->data, real_data, real_data_size);
+                  recv_buffer[i][s_i]->count = real_data_size / sizeof(MsgUnit<M>);
+                  delete[] recv_data;
+                  delete[] real_data;
                 }
               },
               i);

@@ -22,24 +22,25 @@ Copyright (c) 2014-2015 Xiaowei Zhu, Tsinghua University
 #include <math.h>
 //#include <hpctoolkit.h>
 
-const double d = (double)0.85;
+using pr_type = float;
+const pr_type d = (pr_type)0.85;
 
 void compute(Graph<Empty>* graph, int iterations) {
   double exec_time = 0;
   exec_time -= get_time();
 
-  double* curr = graph->alloc_vertex_array<double>();
-  double* next = graph->alloc_vertex_array<double>();
+  pr_type* curr = graph->alloc_vertex_array<pr_type>();
+  pr_type* next = graph->alloc_vertex_array<pr_type>();
   VertexSubset* active = graph->alloc_vertex_subset();
   active->fill();
 
-  double delta = graph->process_vertices<double>(
+  pr_type delta = graph->process_vertices<pr_type>(
       [&](VertexId vtx) {
-        curr[vtx] = (double)1;
+        curr[vtx] = (pr_type)1;
         if (graph->out_degree[vtx] > 0) {
           curr[vtx] /= graph->out_degree[vtx];
         }
-        return (double)1;
+        return (pr_type)1;
       },
       active);
   delta /= graph->vertices;
@@ -48,12 +49,12 @@ void compute(Graph<Empty>* graph, int iterations) {
     if (graph->partition_id == 0) {
       printf("delta(%d)=%lf\n", i_i, delta);
     }
-    graph->fill_vertex_array(next, (double)0);
-    graph->process_edges<int, double>(
+    graph->fill_vertex_array(next, (pr_type)0);
+    graph->process_edges<int, pr_type>(
         // @zc: sparse_signal
         [&](VertexId src) { graph->emit(src, curr[src]); },
         // @zc: sparse_slot
-        [&](VertexId src, double msg, VertexAdjList<Empty> outgoing_adj) {
+        [&](VertexId src, pr_type msg, VertexAdjList<Empty> outgoing_adj) {
           for (AdjUnit<Empty>* ptr = outgoing_adj.begin;
                ptr != outgoing_adj.end; ptr++) {
             VertexId dst = ptr->neighbour;
@@ -64,7 +65,7 @@ void compute(Graph<Empty>* graph, int iterations) {
 
         // @zc: dense_signal
         [&](VertexId dst, VertexAdjList<Empty> incoming_adj) {
-          double sum = 0;
+          pr_type sum = 0;
           for (AdjUnit<Empty>* ptr = incoming_adj.begin;
                ptr != incoming_adj.end; ptr++) {
             VertexId src = ptr->neighbour;
@@ -73,20 +74,20 @@ void compute(Graph<Empty>* graph, int iterations) {
           graph->emit(dst, sum);
         },
         // @zc: dense_slot
-        [&](VertexId dst, double msg) {
+        [&](VertexId dst, pr_type msg) {
           write_add(&next[dst], msg);
           return 0;
         },
         active);
     if (i_i == iterations - 1) {
-      delta = graph->process_vertices<double>(
+      delta = graph->process_vertices<pr_type>(
           [&](VertexId vtx) {
             next[vtx] = 1 - d + d * next[vtx];
             return 0;
           },
           active);
     } else {
-      delta = graph->process_vertices<double>(
+      delta = graph->process_vertices<pr_type>(
           [&](VertexId vtx) {
             next[vtx] = 1 - d + d * next[vtx];
             if (graph->out_degree[vtx] > 0) {
@@ -106,7 +107,7 @@ void compute(Graph<Empty>* graph, int iterations) {
     printf("exec_time=%lf(s)\n", exec_time);
   }
 
-  double pr_sum = graph->process_vertices<double>(
+  pr_type pr_sum = graph->process_vertices<pr_type>(
       [&](VertexId vtx) { return curr[vtx]; }, active);
   if (graph->partition_id == 0) {
     printf("pr_sum=%lf\n", pr_sum);
