@@ -1847,8 +1847,7 @@ class Graph {
         for (int step = 1; step < partitions; step++) {
           int i = (partition_id - step + partitions) % partitions;
           for (int s_i = 0; s_i < sockets; s_i++) {
-            // size_t data_size = sizeof(MsgUnit<M>) * send_buffer[partition_id][s_i]->count;
-            size_t data_size = send_buffer[partition_id][s_i]->count;
+            size_t data_size = sizeof(MsgUnit<M>) * send_buffer[partition_id][s_i]->count;
 
             MPI_Send(send_buffer[partition_id][s_i]->data, data_size,
                      MPI_CHAR, i, PassMessage, MPI_COMM_WORLD);
@@ -2062,8 +2061,7 @@ class Graph {
           }
           int i = send_queue[step];
           for (int s_i = 0; s_i < sockets; s_i++) {
-            //size_t data_size = sizeof(MsgUnit<M>) * send_buffer[i][s_i]->count;
-            size_t data_size = send_buffer[i][s_i]->count;
+            size_t data_size = sizeof(MsgUnit<M>) * send_buffer[i][s_i]->count;
 
             MPI_Send(send_buffer[i][s_i]->data,
                      data_size, MPI_CHAR,
