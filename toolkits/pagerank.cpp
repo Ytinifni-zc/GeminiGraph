@@ -154,9 +154,9 @@ int main(int argc, char** argv) {
   //void hpctoolkit_sampling_start(void);
   compute(graph, iterations);
   //void hpctoolkit_sampling_stop(void);
-  for (int run = 0; run < 5; run++) {
-    compute(graph, iterations);
-  }
+  // for (int run = 0; run < 5; run++) {
+  //   compute(graph, iterations);
+  // }
 
   delete graph;
   return 0;
