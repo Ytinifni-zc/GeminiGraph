@@ -1847,13 +1847,19 @@ class Graph {
         for (int step = 1; step < partitions; step++) {
           int i = (partition_id - step + partitions) % partitions;
           for (int s_i = 0; s_i < sockets; s_i++) {
-            int data_size = sizeof(MsgUnit<M>) * send_buffer[partition_id][s_i]->count;
-            char* compressed_data = new char[data_size];
-            auto compressed_data_size = serialize_send_buff(compressed_data, send_buffer[partition_id][s_i]->data, data_size);
-            MPI_Send(compressed_data, compressed_data_size,
+            // size_t data_size = sizeof(MsgUnit<M>) * send_buffer[partition_id][s_i]->count;
+            size_t data_size = send_buffer[partition_id][s_i]->count;
+
+            MPI_Send(send_buffer[partition_id][s_i]->data, data_size,
                      MPI_CHAR, i, PassMessage, MPI_COMM_WORLD);
-            comm_info.send_bytes[partition_id] += compressed_data_size;
-            delete[] compressed_data;
+            comm_info.send_bytes[partition_id] += data_size;
+
+            // char* compressed_data = new char[data_size];
+            // auto compressed_data_size = serialize_send_buff(compressed_data, send_buffer[partition_id][s_i]->data, data_size);
+            // MPI_Send(compressed_data, compressed_data_size,
+            //          MPI_CHAR, i, PassMessage, MPI_COMM_WORLD);
+            // comm_info.send_bytes[partition_id] += compressed_data_size;
+            // delete[] compressed_data;<Paste>
           }
         }
       });
@@ -1864,21 +1870,27 @@ class Graph {
             MPI_Status recv_status;
             int recv_data_size = 0;
             MPI_Probe(i, PassMessage, MPI_COMM_WORLD, &recv_status);
-            //MPI_Get_count(&recv_status, MPI_CHAR, &recv_buffer[i][s_i]->count);
-            MPI_Get_count(&recv_status, MPI_CHAR, &recv_data_size);
-            char* recv_data = new char[recv_data_size];
-            //MPI_Recv(recv_buffer[i][s_i]->data, recv_buffer[i][s_i]->count,
-            MPI_Recv(recv_data, recv_data_size,
+
+            MPI_Get_count(&recv_status, MPI_CHAR, &recv_buffer[i][s_i]->count);
+            MPI_Recv(recv_buffer[i][s_i]->data, recv_buffer[i][s_i]->count,
                      MPI_CHAR, i, PassMessage, MPI_COMM_WORLD,
                      MPI_STATUS_IGNORE);
-            comm_info.recv_bytes[partition_id] += recv_data_size;
-            auto real_data_size = find_deserialize_size(recv_data, recv_data_size);
-            char* real_data = new char[real_data_size];
-            deserialize_recv_buff(real_data, real_data_size, recv_data, recv_data_size);
-            memcpy(recv_buffer[i][s_i]->data, real_data, real_data_size);
-            recv_buffer[i][s_i]->count = real_data_size / sizeof(MsgUnit<M>);
-            delete[] recv_data;
-            delete[] real_data;
+            comm_info.recv_bytes[partition_id] += recv_buffer[i][s_i]->count;
+            recv_buffer[i][s_i]->count /= sizeof(MsgUnit<M>);
+
+            // MPI_Get_count(&recv_status, MPI_CHAR, &recv_data_size);
+            // char* recv_data = new char[recv_data_size];
+            // MPI_Recv(recv_data, recv_data_size,
+            //          MPI_CHAR, i, PassMessage, MPI_COMM_WORLD,
+            //          MPI_STATUS_IGNORE);
+            // comm_info.recv_bytes[partition_id] += recv_data_size;
+            // auto real_data_size = find_deserialize_size(recv_data, recv_data_size);
+            // char* real_data = new char[real_data_size];
+            // deserialize_recv_buff(real_data, real_data_size, recv_data, recv_data_size);
+            // memcpy(recv_buffer[i][s_i]->data, real_data, real_data_size);
+            // recv_buffer[i][s_i]->count = real_data_size / sizeof(MsgUnit<M>);
+            // delete[] recv_data;
+            // delete[] real_data;
           }
           recv_queue[recv_queue_size] = i;
           recv_queue_mutex.lock();
@@ -2050,16 +2062,20 @@ class Graph {
           }
           int i = send_queue[step];
           for (int s_i = 0; s_i < sockets; s_i++) {
-            // MPI_Send(send_buffer[i][s_i]->data,
-            //          sizeof(MsgUnit<M>) * send_buffer[i][s_i]->count, MPI_CHAR,
-            //          i, PassMessage, MPI_COMM_WORLD);
-            int data_size = sizeof(MsgUnit<M>) * send_buffer[i][s_i]->count;
-            char* compressed_data = new char[data_size];
-            auto compressed_data_size = serialize_send_buff(compressed_data, send_buffer[i][s_i]->data, data_size);
-            MPI_Send(compressed_data, compressed_data_size, MPI_CHAR,
+            //size_t data_size = sizeof(MsgUnit<M>) * send_buffer[i][s_i]->count;
+            size_t data_size = send_buffer[i][s_i]->count;
+
+            MPI_Send(send_buffer[i][s_i]->data,
+                     data_size, MPI_CHAR,
                      i, PassMessage, MPI_COMM_WORLD);
-            comm_info.send_bytes[partition_id] += compressed_data_size;
-            delete[] compressed_data;
+            comm_info.send_bytes[partition_id] += data_size;
+
+            // char* compressed_data = new char[data_size];
+            // auto compressed_data_size = serialize_send_buff(compressed_data, send_buffer[i][s_i]->data, data_size);
+            // MPI_Send(compressed_data, compressed_data_size, MPI_CHAR,
+            //          i, PassMessage, MPI_COMM_WORLD);
+            // comm_info.send_bytes[partition_id] += compressed_data_size;
+            // delete[] compressed_data;
           }
         }
       });
@@ -2070,30 +2086,31 @@ class Graph {
           threads.emplace_back(
               [&](int i) {
                 for (int s_i = 0; s_i < sockets; s_i++) {
-                  // MPI_Status recv_status;
-                  // MPI_Probe(i, PassMessage, MPI_COMM_WORLD, &recv_status);
-                  // MPI_Get_count(&recv_status, MPI_CHAR,
-                  //               &recv_buffer[i][s_i]->count);
-                  // MPI_Recv(recv_buffer[i][s_i]->data,
-                  //          recv_buffer[i][s_i]->count, MPI_CHAR, i, PassMessage,
-                  //          MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-                  // comm_info.recv_bytes[partition_id] += recv_buffer[i][s_i]->count;
-                  // recv_buffer[i][s_i]->count /= sizeof(MsgUnit<M>);
                   MPI_Status recv_status;
-                  int recv_data_size = 0;
+
                   MPI_Probe(i, PassMessage, MPI_COMM_WORLD, &recv_status);
-                  MPI_Get_count(&recv_status, MPI_CHAR, &recv_data_size);
-                  char* recv_data = new char[recv_data_size];
-                  MPI_Recv(recv_data, recv_data_size, MPI_CHAR, i, PassMessage,
+                  MPI_Get_count(&recv_status, MPI_CHAR,
+                                &recv_buffer[i][s_i]->count);
+                  MPI_Recv(recv_buffer[i][s_i]->data,
+                           recv_buffer[i][s_i]->count, MPI_CHAR, i, PassMessage,
                            MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-                  comm_info.recv_bytes[partition_id] += recv_data_size;
-                  auto real_data_size = find_deserialize_size(recv_data, recv_data_size);
-                  char* real_data = new char[real_data_size];
-                  deserialize_recv_buff(real_data, real_data_size, recv_data, recv_data_size);
-                  memcpy(recv_buffer[i][s_i]->data, real_data, real_data_size);
-                  recv_buffer[i][s_i]->count = real_data_size / sizeof(MsgUnit<M>);
-                  delete[] recv_data;
-                  delete[] real_data;
+                  comm_info.recv_bytes[partition_id] += recv_buffer[i][s_i]->count;
+                  recv_buffer[i][s_i]->count /= sizeof(MsgUnit<M>);
+
+                  // int recv_data_size = 0;
+                  // MPI_Probe(i, PassMessage, MPI_COMM_WORLD, &recv_status);
+                  // MPI_Get_count(&recv_status, MPI_CHAR, &recv_data_size);
+                  // char* recv_data = new char[recv_data_size];
+                  // MPI_Recv(recv_data, recv_data_size, MPI_CHAR, i, PassMessage,
+                  //          MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+                  // comm_info.recv_bytes[partition_id] += recv_data_size;
+                  // auto real_data_size = find_deserialize_size(recv_data, recv_data_size);
+                  // char* real_data = new char[real_data_size];
+                  // deserialize_recv_buff(real_data, real_data_size, recv_data, recv_data_size);
+                  // memcpy(recv_buffer[i][s_i]->data, real_data, real_data_size);
+                  // recv_buffer[i][s_i]->count = real_data_size / sizeof(MsgUnit<M>);
+                  // delete[] recv_data;
+                  // delete[] real_data;
                 }
               },
               i);
