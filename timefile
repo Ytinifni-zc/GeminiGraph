@@ -1,0 +1,248 @@
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.017  000.017: --- NVIM STARTING ---
+000.467  000.451: locale set
+001.376  000.908: inits 1
+001.401  000.025: window checked
+002.402  001.001: parsing arguments
+002.408  000.006: expanding arguments
+002.529  000.122: inits 2
+003.869  001.339: init highlight
+032.152  027.698  027.698: sourcing /home/zhaoc/local/share/nvim/runtime/filetype.vim
+032.349  000.073  000.073: sourcing /home/zhaoc/local/share/nvim/runtime/ftplugin.vim
+032.512  000.062  000.062: sourcing /home/zhaoc/local/share/nvim/runtime/indent.vim
+035.441  002.702  002.702: sourcing /home/zhaoc/.local/share/nvim/site/autoload/plug.vim
+040.571  000.767  000.767: sourcing /home/zhaoc/local/share/nvim/runtime/ftoff.vim
+064.048  000.072  000.072: sourcing /home/zhaoc/.local/share/nvim/plugged/neosnippet/ftdetect/neosnippet.vim
+064.441  021.752  021.680: sourcing /home/zhaoc/local/share/nvim/runtime/filetype.vim
+064.692  000.021  000.021: sourcing /home/zhaoc/local/share/nvim/runtime/ftplugin.vim
+064.934  000.017  000.017: sourcing /home/zhaoc/local/share/nvim/runtime/indent.vim
+065.844  000.388  000.388: sourcing /home/zhaoc/local/share/nvim/runtime/syntax/syncolor.vim
+066.030  000.786  000.398: sourcing /home/zhaoc/local/share/nvim/runtime/syntax/synload.vim
+066.079  001.055  000.269: sourcing /home/zhaoc/local/share/nvim/runtime/syntax/syntax.vim
+066.104  062.054  007.907: sourcing /home/zhaoc/.config/nvim/init.vim
+066.111  000.189: sourcing vimrc file(s)
+066.609  000.302  000.302: sourcing /home/zhaoc/.local/share/nvim/plugged/LanguageClient-neovim/plugin/LanguageClient.vim
+067.837  001.156  001.156: sourcing /home/zhaoc/.fzf/plugin/fzf.vim
+069.008  001.077  001.077: sourcing /home/zhaoc/.local/share/nvim/plugged/fzf.vim/plugin/fzf.vim
+069.325  000.220  000.220: sourcing /home/zhaoc/.local/share/nvim/plugged/neosnippet/plugin/neosnippet.vim
+069.626  000.100  000.100: sourcing /home/zhaoc/.local/share/nvim/plugged/deoplete.nvim/autoload/deoplete.vim
+069.976  000.257  000.257: sourcing /home/zhaoc/.local/share/nvim/plugged/deoplete.nvim/autoload/deoplete/init.vim
+070.042  000.618  000.261: sourcing /home/zhaoc/.local/share/nvim/plugged/deoplete.nvim/plugin/deoplete.vim
+070.183  000.060  000.060: sourcing /home/zhaoc/.local/share/nvim/plugged/echodoc.vim/plugin/echodoc.vim
+071.462  001.203  001.203: sourcing /home/zhaoc/.local/share/nvim/plugged/tagbar/plugin/tagbar.vim
+072.122  000.094  000.094: sourcing /home/zhaoc/local/share/nvim/runtime/autoload/provider/pythonx.vim
+119.963  000.452  000.452: sourcing /home/zhaoc/local/share/nvim/runtime/autoload/remote/host.vim
+120.179  048.368  047.822: sourcing /home/zhaoc/local/share/nvim/runtime/autoload/provider/python3.vim
+122.187  050.635  002.267: sourcing /home/zhaoc/.local/share/nvim/plugged/LeaderF/plugin/leaderf.vim
+122.760  000.456  000.456: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-gutentags/plugin/gutentags.vim
+124.713  001.844  001.844: sourcing /home/zhaoc/.local/share/nvim/plugged/asyncrun.vim/plugin/asyncrun.vim
+125.628  000.271  000.271: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-gitgutter/autoload/gitgutter/utility.vim
+126.453  000.182  000.182: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-gitgutter/autoload/gitgutter/highlight.vim
+127.434  002.609  002.156: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-gitgutter/plugin/gitgutter.vim
+127.896  000.347  000.347: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-fugitive/plugin/fugitive.vim
+128.239  000.203  000.203: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-indentguides/plugin/indentguides.vim
+131.608  003.271  003.271: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-devicons/plugin/webdevicons.vim
+132.211  000.221  000.221: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline.vim
+132.692  000.169  000.169: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/init.vim
+133.481  000.157  000.157: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/parts.vim
+134.766  003.051  002.504: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/plugin/airline.vim
+135.284  000.031  000.031: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/gui_shim.vim
+135.671  000.344  000.344: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/gzip.vim
+135.730  000.021  000.021: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/health.vim
+135.855  000.087  000.087: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/man.vim
+136.688  000.798  000.798: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/matchit.vim
+137.021  000.291  000.291: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/matchparen.vim
+137.896  000.830  000.830: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/netrwPlugin.vim
+138.894  000.310  000.310: sourcing /home/zhaoc/local/share/nvim/runtime/autoload/remote/define.vim
+139.085  000.876  000.566: sourcing /home/zhaoc/.local/share/nvim/rplugin.vim
+139.102  001.153  000.277: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/rplugin.vim
+139.174  000.031  000.031: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/rrhelper.vim
+139.375  000.162  000.162: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/shada.vim
+139.465  000.048  000.048: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/spellfile.vim
+139.768  000.263  000.263: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/tarPlugin.vim
+139.989  000.172  000.172: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/tohtml.vim
+140.084  000.054  000.054: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/tutor.vim
+140.397  000.273  000.273: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/zipPlugin.vim
+140.415  002.694: loading plugins
+140.522  000.107: loading packages
+140.637  000.115: loading after plugins
+140.654  000.017: inits 3
+146.113  005.459: reading ShaDa
+147.967  001.855: clearing screen
+153.033  000.151  000.151: sourcing /home/zhaoc/local/share/nvim/runtime/ftplugin/c.vim
+153.500  001.259  001.108: sourcing /home/zhaoc/local/share/nvim/runtime/ftplugin/cpp.vim
+154.141  000.040  000.040: sourcing /home/zhaoc/local/share/nvim/runtime/indent/cpp.vim
+157.434  002.562  002.562: sourcing /home/zhaoc/local/share/nvim/runtime/syntax/c.vim
+161.166  003.640  003.640: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-cpp-enhanced-highlight/after/syntax/c.vim
+161.485  006.816  000.614: sourcing /home/zhaoc/local/share/nvim/runtime/syntax/cpp.vim
+166.311  004.694  004.694: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-cpp-enhanced-highlight/after/syntax/cpp.vim
+167.003  000.363  000.363: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions.vim
+167.525  000.290  000.290: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/branch.vim
+168.024  000.204  000.204: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/tabline.vim
+168.352  000.076  000.076: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/tabline/autoshow.vim
+168.894  000.133  000.133: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/tabline/tabs.vim
+169.381  000.235  000.235: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/tabline/buffers.vim
+169.789  000.109  000.109: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/section.vim
+170.369  000.249  000.249: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/highlighter.vim
+174.123  000.075  000.075: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/themes.vim
+174.504  000.671  000.596: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/themes/dark.vim
+184.763  000.149  000.149: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/util.vim
+189.235  000.203  000.203: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/builder.vim
+189.720  000.119  000.119: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/default.vim
+210.837  003.777  003.777: sourcing /home/zhaoc/.local/share/nvim/plugged/LanguageClient-neovim/autoload/LanguageClient.vim
+211.140  000.106  000.106: sourcing /home/zhaoc/.local/share/nvim/plugged/LanguageClient-neovim/autoload/LSP.vim
+213.419  001.862  001.862: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-gutentags/autoload/gutentags.vim
+215.971  000.877  000.877: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-gutentags/autoload/gutentags/ctags.vim
+232.382  009.979  009.979: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-fugitive/autoload/fugitive.vim
+235.232  055.054: opening buffers
+235.941  000.058  000.058: sourcing /home/zhaoc/local/share/nvim/runtime/autoload/provider.vim
+373.372  137.970  137.912: sourcing /home/zhaoc/.local/share/nvim/plugged/LeaderF/autoload/lfMru.vim
+375.070  000.303  000.303: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-gitgutter/autoload/gitgutter.vim
+376.523  000.190  000.190: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-gitgutter/autoload/gitgutter/async.vim
+376.996  000.202  000.202: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-gitgutter/autoload/gitgutter/debug.vim
+388.075  007.261  007.261: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-gitgutter/autoload/gitgutter/diff.vim
+427.336  046.177: BufEnter autocommands
+427.352  000.016: editing files in windows
+428.198  000.483  000.483: sourcing /home/zhaoc/.local/share/nvim/plugged/deoplete.nvim/autoload/deoplete/util.vim
+428.607  000.217  000.217: sourcing /home/zhaoc/.local/share/nvim/plugged/deoplete.nvim/autoload/deoplete/custom.vim
+570.523  000.229  000.229: sourcing /home/zhaoc/.local/share/nvim/plugged/deoplete.nvim/autoload/deoplete/mapping.vim
+571.158  000.379  000.379: sourcing /home/zhaoc/.local/share/nvim/plugged/deoplete.nvim/autoload/deoplete/handler.vim
+572.357  143.696: VimEnter autocommands
+572.367  000.011: before starting main loop
+573.778  000.271  000.271: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/tabline/ctrlspace.vim
+574.771  000.339  000.339: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/tabline/builder.vim
+575.353  000.119  000.119: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/tabline/buflist.vim
+583.093  000.050  000.050: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-devicons/autoload/airline/extensions/tabline/formatters/webdevicons.vim
+583.528  000.075  000.075: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/tabline/formatters/unique_tail.vim
+584.054  000.122  000.122: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/tabline/formatters/default.vim
+652.133  000.241  000.241: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/async.vim
+657.657  084.073: first screen update
+657.664  000.007: --- NVIM STARTED ---
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.012  000.012: --- NVIM STARTING ---
+000.394  000.382: locale set
+001.175  000.781: inits 1
+001.197  000.022: window checked
+001.850  000.654: parsing arguments
+001.856  000.006: expanding arguments
+001.962  000.106: inits 2
+003.103  001.141: init highlight
+027.075  023.484  023.484: sourcing /home/zhaoc/local/share/nvim/runtime/filetype.vim
+027.241  000.063  000.063: sourcing /home/zhaoc/local/share/nvim/runtime/ftplugin.vim
+027.377  000.053  000.053: sourcing /home/zhaoc/local/share/nvim/runtime/indent.vim
+029.856  002.282  002.282: sourcing /home/zhaoc/.local/share/nvim/site/autoload/plug.vim
+034.175  000.691  000.691: sourcing /home/zhaoc/local/share/nvim/runtime/ftoff.vim
+055.028  000.064  000.064: sourcing /home/zhaoc/.local/share/nvim/plugged/neosnippet/ftdetect/neosnippet.vim
+055.357  019.366  019.302: sourcing /home/zhaoc/local/share/nvim/runtime/filetype.vim
+055.572  000.018  000.018: sourcing /home/zhaoc/local/share/nvim/runtime/ftplugin.vim
+055.779  000.015  000.015: sourcing /home/zhaoc/local/share/nvim/runtime/indent.vim
+056.574  000.342  000.342: sourcing /home/zhaoc/local/share/nvim/runtime/syntax/syncolor.vim
+056.745  000.698  000.356: sourcing /home/zhaoc/local/share/nvim/runtime/syntax/synload.vim
+056.789  000.932  000.234: sourcing /home/zhaoc/local/share/nvim/runtime/syntax/syntax.vim
+056.811  053.564  006.660: sourcing /home/zhaoc/.config/nvim/init.vim
+056.817  000.151: sourcing vimrc file(s)
+057.261  000.270  000.270: sourcing /home/zhaoc/.local/share/nvim/plugged/LanguageClient-neovim/plugin/LanguageClient.vim
+058.362  001.038  001.038: sourcing /home/zhaoc/.fzf/plugin/fzf.vim
+059.394  000.953  000.953: sourcing /home/zhaoc/.local/share/nvim/plugged/fzf.vim/plugin/fzf.vim
+059.680  000.203  000.203: sourcing /home/zhaoc/.local/share/nvim/plugged/neosnippet/plugin/neosnippet.vim
+059.950  000.087  000.087: sourcing /home/zhaoc/.local/share/nvim/plugged/deoplete.nvim/autoload/deoplete.vim
+060.255  000.222  000.222: sourcing /home/zhaoc/.local/share/nvim/plugged/deoplete.nvim/autoload/deoplete/init.vim
+060.313  000.541  000.231: sourcing /home/zhaoc/.local/share/nvim/plugged/deoplete.nvim/plugin/deoplete.vim
+060.438  000.053  000.053: sourcing /home/zhaoc/.local/share/nvim/plugged/echodoc.vim/plugin/echodoc.vim
+061.586  001.080  001.080: sourcing /home/zhaoc/.local/share/nvim/plugged/tagbar/plugin/tagbar.vim
+061.992  000.324  000.324: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-gutentags/plugin/gutentags.vim
+063.419  001.352  001.352: sourcing /home/zhaoc/.local/share/nvim/plugged/asyncrun.vim/plugin/asyncrun.vim
+064.061  000.207  000.207: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-gitgutter/autoload/gitgutter/utility.vim
+064.623  000.135  000.135: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-gitgutter/autoload/gitgutter/highlight.vim
+065.344  001.848  001.506: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-gitgutter/plugin/gitgutter.vim
+065.676  000.252  000.252: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-fugitive/plugin/fugitive.vim
+065.913  000.131  000.131: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-indentguides/plugin/indentguides.vim
+068.629  002.645  002.645: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-devicons/plugin/webdevicons.vim
+069.090  000.172  000.172: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline.vim
+069.447  000.127  000.127: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/init.vim
+070.069  000.121  000.121: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/parts.vim
+071.028  002.315  001.896: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/plugin/airline.vim
+071.419  000.023  000.023: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/gui_shim.vim
+071.720  000.270  000.270: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/gzip.vim
+071.766  000.017  000.017: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/health.vim
+071.855  000.065  000.065: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/man.vim
+072.517  000.617  000.617: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/matchit.vim
+072.772  000.224  000.224: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/matchparen.vim
+073.406  000.602  000.602: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/netrwPlugin.vim
+074.078  000.244  000.244: sourcing /home/zhaoc/local/share/nvim/runtime/autoload/remote/host.vim
+074.573  000.221  000.221: sourcing /home/zhaoc/local/share/nvim/runtime/autoload/remote/define.vim
+074.697  001.051  000.587: sourcing /home/zhaoc/.local/share/nvim/rplugin.vim
+074.715  001.270  000.219: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/rplugin.vim
+074.772  000.024  000.024: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/rrhelper.vim
+074.926  000.124  000.124: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/shada.vim
+074.997  000.039  000.039: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/spellfile.vim
+075.215  000.188  000.188: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/tarPlugin.vim
+075.379  000.131  000.131: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/tohtml.vim
+075.440  000.031  000.031: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/tutor.vim
+075.691  000.223  000.223: sourcing /home/zhaoc/local/share/nvim/runtime/plugin/zipPlugin.vim
+075.710  002.040: loading plugins
+075.793  000.083: loading packages
+075.885  000.092: loading after plugins
+075.896  000.011: inits 3
+080.572  004.675: reading ShaDa
+082.539  001.968: clearing screen
+086.540  000.122  000.122: sourcing /home/zhaoc/local/share/nvim/runtime/ftplugin/c.vim
+086.958  001.039  000.917: sourcing /home/zhaoc/local/share/nvim/runtime/ftplugin/cpp.vim
+087.472  000.033  000.033: sourcing /home/zhaoc/local/share/nvim/runtime/indent/cpp.vim
+090.161  002.105  002.105: sourcing /home/zhaoc/local/share/nvim/runtime/syntax/c.vim
+093.433  003.197  003.197: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-cpp-enhanced-highlight/after/syntax/c.vim
+093.711  005.817  000.516: sourcing /home/zhaoc/local/share/nvim/runtime/syntax/cpp.vim
+097.960  004.137  004.137: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-cpp-enhanced-highlight/after/syntax/cpp.vim
+098.539  000.287  000.287: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions.vim
+098.970  000.238  000.238: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/branch.vim
+099.377  000.174  000.174: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/tabline.vim
+099.633  000.062  000.062: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/tabline/autoshow.vim
+100.080  000.113  000.113: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/tabline/tabs.vim
+100.474  000.192  000.192: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/tabline/buffers.vim
+100.812  000.084  000.084: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/section.vim
+101.275  000.207  000.207: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/highlighter.vim
+104.546  000.066  000.066: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/themes.vim
+104.887  000.593  000.527: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/themes/dark.vim
+112.406  000.097  000.097: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/util.vim
+115.417  000.140  000.140: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/builder.vim
+115.775  000.099  000.099: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/default.vim
+131.581  003.643  003.643: sourcing /home/zhaoc/.local/share/nvim/plugged/LanguageClient-neovim/autoload/LanguageClient.vim
+131.731  000.067  000.067: sourcing /home/zhaoc/.local/share/nvim/plugged/LanguageClient-neovim/autoload/LSP.vim
+132.482  000.563  000.563: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-gutentags/autoload/gutentags.vim
+133.411  000.321  000.321: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-gutentags/autoload/gutentags/ctags.vim
+141.677  004.357  004.357: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-fugitive/autoload/fugitive.vim
+142.922  038.120: opening buffers
+143.118  000.094  000.094: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-gitgutter/autoload/gitgutter.vim
+143.651  000.067  000.067: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-gitgutter/autoload/gitgutter/async.vim
+143.877  000.105  000.105: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-gitgutter/autoload/gitgutter/debug.vim
+154.258  007.001  007.001: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-gitgutter/autoload/gitgutter/diff.vim
+190.590  040.400: BufEnter autocommands
+190.606  000.016: editing files in windows
+191.382  000.419  000.419: sourcing /home/zhaoc/.local/share/nvim/plugged/deoplete.nvim/autoload/deoplete/util.vim
+191.759  000.213  000.213: sourcing /home/zhaoc/.local/share/nvim/plugged/deoplete.nvim/autoload/deoplete/custom.vim
+193.126  000.168  000.168: sourcing /home/zhaoc/local/share/nvim/runtime/autoload/provider/pythonx.vim
+239.186  045.726  045.726: sourcing /home/zhaoc/local/share/nvim/runtime/autoload/provider/python3.vim
+239.752  000.101  000.101: sourcing /home/zhaoc/local/share/nvim/runtime/autoload/provider.vim
+376.332  000.240  000.240: sourcing /home/zhaoc/.local/share/nvim/plugged/deoplete.nvim/autoload/deoplete/mapping.vim
+376.943  000.385  000.385: sourcing /home/zhaoc/.local/share/nvim/plugged/deoplete.nvim/autoload/deoplete/handler.vim
+378.141  140.283: VimEnter autocommands
+378.151  000.010: before starting main loop
+404.120  000.236  000.236: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/tabline/ctrlspace.vim
+404.986  000.298  000.298: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/tabline/builder.vim
+405.483  000.101  000.101: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/tabline/buflist.vim
+412.414  000.046  000.046: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-devicons/autoload/airline/extensions/tabline/formatters/webdevicons.vim
+412.781  000.067  000.067: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/tabline/formatters/unique_tail.vim
+413.210  000.096  000.096: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/tabline/formatters/default.vim
+472.058  000.230  000.230: sourcing /home/zhaoc/.local/share/nvim/plugged/vim-airline/autoload/airline/async.vim
+476.384  097.160: first screen update
+476.390  000.006: --- NVIM STARTED ---

@@ -97,6 +97,16 @@ void compute(Graph<Weight> * graph, VertexId root) {
       }
     }
     printf("distance[%u]=%f\n", max_v_i, distance[max_v_i]);
+    for (int i = 0; i < graph->partitions; ++i) {
+      printf("Node[%d] send %.4fGB, recv %.4fGB\n",
+          i,
+          graph->comm_info.send_bytes[i]/(1<<30),
+          graph->comm_info.recv_bytes[i]/(1<<30));
+    }
+  }
+  for (int i = 0; i < graph->partitions; ++i) {
+    graph->comm_info.send_bytes[i] = 0;
+    graph->comm_info.recv_bytes[i] = 0;
   }
 
   graph->dealloc_vertex_array(distance);
@@ -118,9 +128,9 @@ int main(int argc, char ** argv) {
   VertexId root = std::atoi(argv[3]);
 
   compute(graph, root);
-  for (int run=0;run<5;run++) {
-    compute(graph, root);
-  }
+  // for (int run=0;run<5;run++) {
+  //   compute(graph, root);
+  // }
 
   delete graph;
   return 0;

@@ -28,6 +28,7 @@ const pr_type d = (pr_type)0.85;
 void compute(Graph<Empty>* graph, int iterations) {
   double exec_time = 0;
   exec_time -= get_time();
+  double comp_time = 0;
 
   pr_type* curr = graph->alloc_vertex_array<pr_type>();
   pr_type* next = graph->alloc_vertex_array<pr_type>();
@@ -46,6 +47,9 @@ void compute(Graph<Empty>* graph, int iterations) {
   delta /= graph->vertices;
 
   for (int i_i = 0; i_i < iterations; i_i++) {
+    double it_exec_time = 0;
+    it_exec_time -= get_time();
+
     if (graph->partition_id == 0) {
       printf("delta(%d)=%lf\n", i_i, delta);
     }
@@ -100,12 +104,25 @@ void compute(Graph<Empty>* graph, int iterations) {
     }
     delta /= graph->vertices;
     std::swap(curr, next);
+
+    it_exec_time += get_time();
+    auto comm_time = graph->recv_time;
+    printf("Part[%d] iter(%d) send: %.4lf(s) recv: %.4lf(s) sum: %.4lf(s)\n"
+        "exec: %.4lf(s) exec-comm: %.4lf(s)\n",
+        graph->partition_id, i_i, graph->send_time, graph->recv_time,
+        comm_time, it_exec_time, it_exec_time-comm_time);
+    graph->send_time = 0;
+    graph->recv_time = 0;
+    comp_time = it_exec_time-comm_time;
+
   }
 
   exec_time += get_time();
-  if (graph->partition_id == 0) {
-    printf("exec_time=%lf(s)\n", exec_time);
-  }
+  // if (graph->partition_id == 0) {
+  //   printf("exec_time=%lf(s)\n", exec_time);
+  // }
+  printf("Part[%d] exec_time=%lf(s) comp_time=%lf(s)\n",
+      graph->partition_id, exec_time, comp_time);
 
   pr_type pr_sum = graph->process_vertices<pr_type>(
       [&](VertexId vtx) { return curr[vtx]; }, active);

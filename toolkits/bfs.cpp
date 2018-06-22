@@ -100,6 +100,16 @@ void compute(Graph<Empty>* graph, VertexId root) {
       }
     }
     printf("found_vertices = %u\n", found_vertices);
+    for (int i = 0; i < graph->partitions; ++i) {
+      printf("Node[%d] send %.4fGB, recv %.4fGB\n",
+          i,
+          graph->comm_info.send_bytes[i]/(1<<30),
+          graph->comm_info.recv_bytes[i]/(1<<30));
+    }
+  }
+  for (int i = 0; i < graph->partitions; ++i) {
+    graph->comm_info.send_bytes[i] = 0;
+    graph->comm_info.recv_bytes[i] = 0;
   }
 
   graph->dealloc_vertex_array(parent);
@@ -122,9 +132,9 @@ int main(int argc, char** argv) {
   graph->load_directed(argv[1], std::atoi(argv[2]));
 
   compute(graph, root);
-  for (int run = 0; run < 5; run++) {
-    compute(graph, root);
-  }
+  // for (int run = 0; run < 5; run++) {
+  //   compute(graph, root);
+  // }
 
   delete graph;
   return 0;

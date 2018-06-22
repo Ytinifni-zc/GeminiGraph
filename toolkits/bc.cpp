@@ -393,6 +393,16 @@ void compute_compact(Graph<Empty> * graph, VertexId root) {
     for (VertexId v_i=0;v_i<20;v_i++) {
       printf("%lf %lf\n", dependencies[v_i], 1 / inv_num_paths[v_i]);
     }
+    for (int i = 0; i < graph->partitions; ++i) {
+      printf("Node[%d] send %.4fGB, recv %.4fGB\n",
+          i,
+          graph->comm_info.send_bytes[i]/(1<<30),
+          graph->comm_info.recv_bytes[i]/(1<<30));
+    }
+  }
+  for (int i = 0; i < graph->partitions; ++i) {
+    graph->comm_info.send_bytes[i] = 0;
+    graph->comm_info.recv_bytes[i] = 0;
   }
 
   graph->dealloc_vertex_array(dependencies);
@@ -421,13 +431,13 @@ int main(int argc, char ** argv) {
   #else
   compute(graph, root);
   #endif
-  for (int run=0;run<5;run++) {
-    #if COMPACT
-    compute_compact(graph, root);
-    #else
-    compute(graph, root);
-    #endif
-  }
+  // for (int run=0;run<5;run++) {
+  //   #if COMPACT
+  //   compute_compact(graph, root);
+  //   #else
+  //   compute(graph, root);
+  //   #endif
+  // }
 
   delete graph;
   return 0;
