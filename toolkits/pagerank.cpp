@@ -107,13 +107,13 @@ void compute(Graph<Empty>* graph, int iterations) {
 
     it_exec_time += get_time();
     auto comm_time = graph->recv_time;
-    printf("Part[%d] iter(%d) send: %.4lf(s) recv: %.4lf(s) sum: %.4lf(s)\n"
+    printf("Part[%d] iter(%d) send: %.4lf(s) recv: %.4lf(s) comm: %.4lf(s)\n"
         "exec: %.4lf(s) exec-comm: %.4lf(s)\n",
         graph->partition_id, i_i, graph->send_time, graph->recv_time,
         comm_time, it_exec_time, it_exec_time-comm_time);
     graph->send_time = 0;
     graph->recv_time = 0;
-    comp_time = it_exec_time-comm_time;
+    comp_time += it_exec_time-comm_time;
 
   }
 
@@ -121,7 +121,7 @@ void compute(Graph<Empty>* graph, int iterations) {
   // if (graph->partition_id == 0) {
   //   printf("exec_time=%lf(s)\n", exec_time);
   // }
-  printf("Part[%d] exec_time=%lf(s) comp_time=%lf(s)\n",
+  printf("=*= Part[%d] exec_time=%lf(s) comp_time=%lf(s)\n",
       graph->partition_id, exec_time, comp_time);
 
   pr_type pr_sum = graph->process_vertices<pr_type>(

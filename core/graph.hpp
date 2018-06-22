@@ -1871,6 +1871,9 @@ class Graph {
       recv_queue_size += 1;
       recv_queue_mutex.unlock();
       std::thread send_thread([&]() {
+
+            send_time -= get_time();
+
         for (int step = 1; step < partitions; step++) {
           int i = (partition_id - step + partitions) % partitions;
           for (int s_i = 0; s_i < sockets; s_i++) {
@@ -1879,15 +1882,9 @@ class Graph {
 #else
             size_t data_size = sizeof(MsgUnit<M>) * send_buffer[partition_id][s_i]->count;
 #endif
-
-            send_time -= MPI_Wtime();
-
             MPI_Send(send_buffer[partition_id][s_i]->data, data_size,
                      MPI_CHAR, i, PassMessage, MPI_COMM_WORLD);
             comm_info.send_bytes[partition_id] += data_size;
-
-            send_time += MPI_Wtime();
-
             // char* compressed_data = new char[data_size];
             // auto compressed_data_size = serialize_send_buff(compressed_data, send_buffer[partition_id][s_i]->data, data_size);
             // MPI_Send(compressed_data, compressed_data_size,
@@ -1896,14 +1893,17 @@ class Graph {
             // delete[] compressed_data;
           }
         }
+
+            send_time += get_time();
+
       });
       std::thread recv_thread([&]() {
+
+            recv_time -= get_time();
+
         for (int step = 1; step < partitions; step++) {
           int i = (partition_id + step) % partitions;
           for (int s_i = 0; s_i < sockets; s_i++) {
-
-            recv_time -= MPI_Wtime();
-
             MPI_Status recv_status;
             MPI_Probe(i, PassMessage, MPI_COMM_WORLD, &recv_status);
 
@@ -1913,8 +1913,6 @@ class Graph {
                      MPI_STATUS_IGNORE);
             comm_info.recv_bytes[partition_id] += recv_buffer[i][s_i]->count;
             recv_buffer[i][s_i]->count /= sizeof(MsgUnit<M>);
-
-            recv_time += MPI_Wtime();
 
             // MPI_Get_count(&recv_status, MPI_CHAR, &recv_data_size);
             // char* recv_data = new char[recv_data_size];
@@ -1935,6 +1933,8 @@ class Graph {
           recv_queue_size += 1;
           recv_queue_mutex.unlock();
         }
+            recv_time += get_time();
+
       });
 
       for (int step = 0; step < partitions; step++) {
@@ -2041,7 +2041,10 @@ class Graph {
         double sync_time = 0;
         sync_time -= get_time();
         std::thread send_thread([&]() {
+            send_time -= get_time();
+
           for (int step = 1; step < partitions; step++) {
+
             int recipient_id = (partition_id + step) % partitions;
             MPI_Send(dense_selective->data +
                          WORD_OFFSET(partition_offset[partition_id]),
@@ -2049,9 +2052,14 @@ class Graph {
                      PassMessage, MPI_COMM_WORLD);
             comm_info.send_bytes[partition_id] += owned_vertices / 64;
           }
+
+            send_time += get_time();
         });
         std::thread recv_thread([&]() {
+            recv_time -= get_time();
+
           for (int step = 1; step < partitions; step++) {
+
             int sender_id = (partition_id - step + partitions) % partitions;
             auto recv_bytes = (partition_offset[sender_id + 1] -
                 partition_offset[sender_id]) / 64;
@@ -2061,7 +2069,10 @@ class Graph {
                      MPI_UNSIGNED_LONG, sender_id, PassMessage, MPI_COMM_WORLD,
                      MPI_STATUS_IGNORE);
             comm_info.recv_bytes[partition_id] += recv_bytes;
+
           }
+            recv_time += get_time();
+
         });
         send_thread.join();
         recv_thread.join();
@@ -2086,6 +2097,8 @@ class Graph {
       std::mutex recv_queue_mutex;
 
       std::thread send_thread([&]() {
+            send_time -= get_time();
+
         for (int step = 0; step < partitions; step++) {
           if (step == partitions - 1) {
             break;
@@ -2106,14 +2119,10 @@ class Graph {
             size_t data_size = send_buffer[i][s_i]->count;
 #endif
 
-            send_time -= MPI_Wtime();
-
             MPI_Send(send_buffer[i][s_i]->data,
                      data_size, MPI_CHAR,
                      i, PassMessage, MPI_COMM_WORLD);
             comm_info.send_bytes[partition_id] += data_size;
-
-            send_time += MPI_Wtime();
 
             // char* compressed_data = new char[data_size];
             // auto compressed_data_size = serialize_send_buff(compressed_data, send_buffer[i][s_i]->data, data_size);
@@ -2123,16 +2132,18 @@ class Graph {
             // delete[] compressed_data;
           }
         }
+            send_time += get_time();
+
       });
       std::thread recv_thread([&]() {
+                  recv_time -= get_time();
+
         std::vector<std::thread> threads;
         for (int step = 1; step < partitions; step++) {
           int i = (partition_id - step + partitions) % partitions;
           threads.emplace_back(
               [&](int i) {
                 for (int s_i = 0; s_i < sockets; s_i++) {
-
-                  recv_time -= MPI_Wtime();
 
                   MPI_Status recv_status;
 
@@ -2144,8 +2155,6 @@ class Graph {
                            MPI_COMM_WORLD, MPI_STATUS_IGNORE);
                   comm_info.recv_bytes[partition_id] += recv_buffer[i][s_i]->count;
                   recv_buffer[i][s_i]->count /= sizeof(MsgUnit<M>);
-
-                  recv_time += MPI_Wtime();
 
                   // int recv_data_size = 0;
                   // MPI_Probe(i, PassMessage, MPI_COMM_WORLD, &recv_status);
@@ -2177,6 +2186,8 @@ class Graph {
         recv_queue_mutex.lock();
         recv_queue_size += 1;
         recv_queue_mutex.unlock();
+                  recv_time += get_time();
+
       });
       current_send_part_id = partition_id;
       for (int step = 0; step < partitions; step++) {
